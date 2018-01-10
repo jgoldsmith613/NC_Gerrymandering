@@ -1,0 +1,13 @@
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+import com.rhc.gerrymandering.domain.ZipCode;
+
+ 
+
+global HardSoftScoreHolder scoreHolder;
+
+rule "sample hard"
+when
+    ZipCode(district == null)
+then
+    scoreHolder.addHardConstraintMatch(kcontext, -1 );
+end

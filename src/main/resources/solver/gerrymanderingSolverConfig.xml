@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<solver>
+	<!-- <environmentMode>FAST_ASSERT</environmentMode> -->
+
+	<scanAnnotatedClasses />
+
+
+	<!-- Score configuration -->
+	<scoreDirectorFactory>
+		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
+	</scoreDirectorFactory>
+
+	<!-- Optimization algorithms configuration -->
+
+	<termination>
+		<unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+	</termination>
+
+	<!-- Optimization algorithms configuration -->
+	<constructionHeuristic />
+	<localSearch>
+		<!-- <unionMoveSelector>
+			<changeMoveSelector />
+			<swapMoveSelector /> -->
+			<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
+			<!-- <pillarSwapMoveSelector />
+		</unionMoveSelector>
+		<forager>
+			<acceptedCountLimit>1000</acceptedCountLimit>
+		</forager> -->
+
+	</localSearch>
+</solver>
