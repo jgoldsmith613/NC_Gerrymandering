@@ -9,13 +9,12 @@ import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.solution.drools.ProblemFactProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
-import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
-import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
+import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScore;
 
 @PlanningSolution
 public class GerrymanderingSolution {
 
-	private HardSoftLongScore score;
+	private SimpleLongScore score;
 
 	@PlanningEntityCollectionProperty
 	private Collection<ZipCode> zipCodes = new ArrayList<ZipCode>();
@@ -43,11 +42,11 @@ public class GerrymanderingSolution {
 	}
 	
 	@PlanningScore
-	public HardSoftLongScore getScore() {
+	public SimpleLongScore getScore() {
 		return score;
 	}
 
-	public void setScore(HardSoftLongScore score) {
+	public void setScore(SimpleLongScore score) {
 		this.score = score;
 	}
 

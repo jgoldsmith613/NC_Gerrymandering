@@ -1,4 +1,4 @@
-import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScoreHolder;
+import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScoreHolder;
 import com.rhc.gerrymandering.domain.ZipCode;
 import com.rhc.gerrymandering.domain.SumationInfo;
 import com.rhc.gerrymandering.domain.DistancePair;
@@ -8,15 +8,15 @@ import com.rhc.gerrymandering.domain.ZipCodeDistances;
 
  
 
-global HardSoftLongScoreHolder scoreHolder;
+global SimpleLongScoreHolder scoreHolder;
 
 
-rule "sample hard"
+/*rule "sample hard"
 when
     ZipCode(district == null)
 then
     scoreHolder.addHardConstraintMatch(kcontext, -1 );
-end
+end*/
 
 rule "distribute population"
 when
@@ -27,7 +27,7 @@ when
          sum($population)
      )
 then        
-        scoreHolder.addSoftConstraintMatch(kcontext, -(($populationSum-$average)*($populationSum-$average)));
+        scoreHolder.addConstraintMatch(kcontext, -(($populationSum-$average)*($populationSum-$average)));
 end
 
 /*rule "minimizing Latitude  and Long Varience"
@@ -58,9 +58,9 @@ when
          $latVariance: variance($lat)
      )
 then
-        scoreHolder.addSoftConstraintMatch(kcontext, -($latVariance.longValue()));
+        scoreHolder.addConstraintMatch(kcontext, -(10*$latVariance.longValue()));
         if($latVariance.longValue() == 0 ){
-                scoreHolder.addSoftConstraintMatch(kcontext, -1000000000000L);
+                scoreHolder.addConstraintMatch(kcontext, -1000000000000L);
         }
         
 end 
@@ -75,9 +75,9 @@ when
          $longVariance: variance($long) 
      )
 then
-        scoreHolder.addSoftConstraintMatch(kcontext, -($longVariance.longValue()));
+        scoreHolder.addConstraintMatch(kcontext, -(10*$longVariance.longValue()));
         if($longVariance.longValue() == 0){                
-                scoreHolder.addSoftConstraintMatch(kcontext, -1000000000000L);
+                scoreHolder.addConstraintMatch(kcontext, -1000000000000L);
         }
         
 end
