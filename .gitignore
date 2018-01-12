@@ -29,3 +29,4 @@ local/*
 *.classpath
 
 support_files/
+/target/

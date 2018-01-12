@@ -14,21 +14,21 @@
 	<!-- Optimization algorithms configuration -->
 
 	<termination>
-		<unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+		<secondsSpentLimit>200</secondsSpentLimit>
 	</termination>
 
 	<!-- Optimization algorithms configuration -->
 	<constructionHeuristic />
 	<localSearch>
-		<!-- <unionMoveSelector>
-			<changeMoveSelector />
-			<swapMoveSelector /> -->
-			<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
-			<!-- <pillarSwapMoveSelector />
-		</unionMoveSelector>
+		<!-- <acceptor>
+			<entityTabuSize>7</entityTabuSize>
+		</acceptor>
 		<forager>
 			<acceptedCountLimit>1000</acceptedCountLimit>
 		</forager> -->
+		<!-- <unionMoveSelector> <changeMoveSelector /> <swapMoveSelector /> -->
+		<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
+		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> </forager> -->
 
 	</localSearch>
 </solver>

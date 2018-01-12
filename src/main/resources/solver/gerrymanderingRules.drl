@@ -1,9 +1,15 @@
-import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScoreHolder;
 import com.rhc.gerrymandering.domain.ZipCode;
+import com.rhc.gerrymandering.domain.SumationInfo;
+import com.rhc.gerrymandering.domain.DistancePair;
+import com.rhc.gerrymandering.domain.ZipCodeDistances;
+
+
 
  
 
-global HardSoftScoreHolder scoreHolder;
+global HardSoftLongScoreHolder scoreHolder;
+
 
 rule "sample hard"
 when
@@ -11,3 +17,104 @@ when
 then
     scoreHolder.addHardConstraintMatch(kcontext, -1 );
 end
+
+rule "distribute population"
+when
+     $district: Integer()
+     SumationInfo($average: averagePerDistrict)
+     $populationSum: Long() from accumulate(
+         ZipCode( district == $district, $population: population),
+         sum($population)
+     )
+then        
+        scoreHolder.addSoftConstraintMatch(kcontext, -(($populationSum-$average)*($populationSum-$average)));
+end
+
+/*rule "minimizing Latitude  and Long Varience"
+when
+     $district: Integer()
+     accumulate(
+         ZipCode( district == $district, $lat: expandedLat, $long: expandedLong),
+         $latVariance: variance($lat),
+         $longVariance: variance($long) 
+     )
+then
+        scoreHolder.addSoftConstraintMatch(kcontext, -($latVariance.longValue()));
+        scoreHolder.addSoftConstraintMatch(kcontext, -($longVariance.longValue()));
+        if($latVariance.longValue() == 0 && $longVariance.longValue() == 0){
+                System.out.println($latVariance);
+                System.out.println($longVariance);
+                
+                scoreHolder.addSoftConstraintMatch(kcontext, -1000000000000L);
+        }
+        
+end*/
+
+rule "minimizing Latitude Varience"
+when
+     $district: Integer()
+     accumulate(
+         ZipCode( district == $district, $lat: expandedLat),
+         $latVariance: variance($lat)
+     )
+then
+        scoreHolder.addSoftConstraintMatch(kcontext, -($latVariance.longValue()));
+        if($latVariance.longValue() == 0 ){
+                scoreHolder.addSoftConstraintMatch(kcontext, -1000000000000L);
+        }
+        
+end 
+
+
+
+rule "minimizing Long Varience"
+when
+     $district: Integer()
+     accumulate(
+         ZipCode( district == $district, $long: expandedLong),
+         $longVariance: variance($long) 
+     )
+then
+        scoreHolder.addSoftConstraintMatch(kcontext, -($longVariance.longValue()));
+        if($longVariance.longValue() == 0){                
+                scoreHolder.addSoftConstraintMatch(kcontext, -1000000000000L);
+        }
+        
+end
+
+
+/*rule "distance minimizing"
+when
+     $district: Integer()
+     $sum: Long() from accumulate(
+         DistancePair(district == $district, $distance: distance),
+         sum($distance) 
+     )
+then
+        scoreHolder.addSoftConstraintMatch(kcontext, -($sum*$sum));
+end
+
+
+rule "Insert Distance Distance"
+when
+     $zipCodeDistances: ZipCodeDistances()
+     ZipCode( district != null, $district: district, $origin: zipCode )
+     ZipCode( zipCode != $origin, $destination: zipCode, district == $district )
+     not DistancePair(origin== $origin, $zipCodeDistances.getDistancePair($origin, $destination) < distance)
+then
+    insertLogical( new DistancePair($origin, $destination, $zipCodeDistances.getDistancePair($origin, $destination) , $district) );
+end */
+
+/*rule "Insert Distance Distance"
+when
+     $zipCodeDistances: ZipCodeDistances()
+     ZipCode( district != null, $district: district, $origin: zipCode )
+     ZipCode( zipCode != $origin, $destination: zipCode, district == $district )
+then
+    long value = $zipCodeDistances.getDistancePair($origin, $destination);
+    scoreHolder.addSoftConstraintMatch(kcontext, -(value*value/10));
+end 
+*/
+
+
+

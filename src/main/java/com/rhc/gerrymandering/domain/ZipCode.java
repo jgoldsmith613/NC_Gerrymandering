@@ -7,20 +7,32 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 public class ZipCode {
 
 	private int zipCode;
-	private int population;
-	private int latitude;
-	private int longitude;
+	private long population;
+	private String latitude;
+	private String longitude;
+	
+	private long expandedLat;
+	private long expandedLong;
 
 	@PlanningVariable(valueRangeProviderRefs = "districts")
 	private Integer district;
+	
+	public long getExpandedLat() {
+		return expandedLat;
+	}
+
+	public long getExpandedLong() {
+		return expandedLong;
+	}
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + latitude;
-		result = prime * result + longitude;
-		result = prime * result + population;
+		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
+		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + (int) (population ^ (population >>> 32));
 		result = prime * result + zipCode;
 		return result;
 	}
@@ -34,9 +46,15 @@ public class ZipCode {
 		if (getClass() != obj.getClass())
 			return false;
 		ZipCode other = (ZipCode) obj;
-		if (latitude != other.latitude)
+		if (latitude == null) {
+			if (other.latitude != null)
+				return false;
+		} else if (!latitude.equals(other.latitude))
 			return false;
-		if (longitude != other.longitude)
+		if (longitude == null) {
+			if (other.longitude != null)
+				return false;
+		} else if (!longitude.equals(other.longitude))
 			return false;
 		if (population != other.population)
 			return false;
@@ -59,28 +77,31 @@ public class ZipCode {
 		this.zipCode = zipCode;
 	}
 
-	public int getPopulation() {
+	public long getPopulation() {
 		return population;
 	}
 
-	public void setPopulation(int population) {
+	public void setPopulation(long population) {
 		this.population = population;
 	}
 
-	public int getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(int latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
+		this.expandedLat = ((Double)(Double.valueOf(latitude) * 100000L)).longValue();
 	}
 
-	public int getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(int longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+		this.expandedLong = ((Double)(Double.valueOf(longitude) * 100000L)).longValue();
+
 	}
 
 	public Integer getDistrict() {
