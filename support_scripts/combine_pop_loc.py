@@ -7,7 +7,7 @@ def validZipCode(zip_code):
 
 
 
-with open('../support_files/2010CensusPop.csv') as csvpop, open('../support_files/gaz2016zcta5centroid.csv') as csvloc, open('../support_files/nc_zip_info.csv', 'w') as output_file:
+with open('../support_files/2010CensusPop_extras.csv') as csvpop, open('../support_files/gaz2016zcta5centroid.csv') as csvloc, open('../support_files/nc_zip_info_no_pop.csv', 'w') as output_file:
     pop_reader = csv.DictReader(csvpop)
     output = {}
     for row in pop_reader:

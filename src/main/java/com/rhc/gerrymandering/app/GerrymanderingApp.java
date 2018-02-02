@@ -5,10 +5,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.optaplanner.benchmark.api.PlannerBenchmark;
 import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
+import org.optaplanner.core.api.score.constraint.ConstraintMatchTotal;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 import com.rhc.gerrymandering.domain.GerrymanderingSolution;
 import com.rhc.gerrymandering.domain.ZipCode;
@@ -38,7 +39,17 @@ public class GerrymanderingApp
  		// Solve the problem
  		GerrymanderingSolution solverPlan = solver.solve(solution);
  		
-        //PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);
+ 		
+ 		ScoreDirector<GerrymanderingSolution> sd = solver.getScoreDirectorFactory().buildScoreDirector();
+ 		sd.setWorkingSolution(solverPlan);
+ 		
+ 		for( ConstraintMatchTotal match : sd.getConstraintMatchTotals()){
+ 			System.out.println(match);
+ 			System.out.println(match.getConstraintMatchCount());
+ 			
+ 		}
+ 		
+       // PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);
         //PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark(solution);
        // plannerBenchmark.benchmark();
  		

@@ -14,14 +14,14 @@
 	<!-- Optimization algorithms configuration -->
 
 	<termination>
-		<minutesSpentLimit>30</minutesSpentLimit>
+		<secondsSpentLimit>1</secondsSpentLimit>
 	</termination>
 
 	<!-- Optimization algorithms configuration -->
 	<constructionHeuristic />
 	<localSearch>
 		<termination>
-			<minutesSpentLimit>20</minutesSpentLimit>
+			<secondsSpentLimit>40</secondsSpentLimit>
 		</termination>
 		<!-- <acceptor> <entityTabuSize>7</entityTabuSize> </acceptor> <forager> <acceptedCountLimit>1000</acceptedCountLimit> 
 			</forager> -->
