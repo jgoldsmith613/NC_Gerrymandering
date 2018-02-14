@@ -17,9 +17,8 @@ public class GerrymanderingSolution {
 	private SimpleLongScore score;
 
 	@PlanningEntityCollectionProperty
-	private Collection<ZipCode> zipCodes = new ArrayList<ZipCode>();
+	private Collection<Block> blocks = new ArrayList<Block>();
 	
-	private ZipCodeDistances zipCodeDistances;
 	
 	
     public GerrymanderingSolution(){
@@ -34,8 +33,8 @@ public class GerrymanderingSolution {
 	@ProblemFactProperty
 	public SumationInfo getSumationInfo(){
 		long population = 0;
-		for(ZipCode zipcode: zipCodes){
-			population+= zipcode.getPopulation();
+		for(Block blocks: blocks){
+			population+= blocks.getPopulation();
 		}
 		
 		return new SumationInfo(population, ((double)population)/districts.length);
@@ -50,21 +49,14 @@ public class GerrymanderingSolution {
 		this.score = score;
 	}
 
-	public Collection<ZipCode> getZipCodes() {
-		return zipCodes;
+	public Collection<Block> getBlocks() {
+		return blocks;
 	}
 
-	public void setZipCodes(Collection<ZipCode> zipCodes) {
-		this.zipCodes = zipCodes;
+	public void setBlock(Collection<Block> blocks) {
+		this.blocks = blocks;
 	}
 
-	@ProblemFactProperty
-	public ZipCodeDistances getZipCodeDistances(){
-		return zipCodeDistances;
-	}
 	
-	public void setZipCodeDistances(ZipCodeDistances zipCodeDistances) {
-		this.zipCodeDistances = zipCodeDistances;
-	}
 
 }

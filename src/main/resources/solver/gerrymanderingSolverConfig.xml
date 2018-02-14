@@ -9,38 +9,85 @@
 	<!-- Score configuration -->
 	<scoreDirectorFactory>
 		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
+		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
 	</scoreDirectorFactory>
 
 	<!-- Optimization algorithms configuration -->
-
 	<termination>
-		<secondsSpentLimit>1</secondsSpentLimit>
+		<minutesSpentLimit>60</minutesSpentLimit>
 	</termination>
+
 
 	<!-- Optimization algorithms configuration -->
 	<constructionHeuristic />
 	<localSearch>
+
 		<termination>
-			<secondsSpentLimit>40</secondsSpentLimit>
+			<minutesSpentLimit>25</minutesSpentLimit>
 		</termination>
-		<!-- <acceptor> <entityTabuSize>7</entityTabuSize> </acceptor> <forager> <acceptedCountLimit>1000</acceptedCountLimit> 
-			</forager> -->
+
+		<changeMoveSelector />
+
 		<!-- <unionMoveSelector> <changeMoveSelector /> <swapMoveSelector /> -->
 		<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
 		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> </forager> -->
+	</localSearch>
+
+	<localSearch>
+
+		<termination>
+			<minutesSpentLimit>10</minutesSpentLimit>
+		</termination>
+
+		<unionMoveSelector>
+			<changeMoveSelector />
+			<swapMoveSelector>
+				<entitySelector id="entitySelector" />
+				<secondaryEntitySelector>
+					<nearbySelection>
+						<originEntitySelector mimicSelectorRef="entitySelector" />
+						<nearbyDistanceMeterClass>com.rhc.gerrymandering.domain.BlockDistanceSingleMeter</nearbyDistanceMeterClass>
+						<parabolicDistributionSizeMaximum>50</parabolicDistributionSizeMaximum>
+					</nearbySelection>
+				</secondaryEntitySelector>
+			</swapMoveSelector>
+			<swapMoveSelector>
+				<entitySelector id="entitySelector2" />
+				<secondaryEntitySelector>
+					<nearbySelection>
+						<originEntitySelector mimicSelectorRef="entitySelector2" />
+						<nearbyDistanceMeterClass>com.rhc.gerrymandering.domain.BlockDistanceMeter</nearbyDistanceMeterClass>
+						<parabolicDistributionSizeMaximum>50</parabolicDistributionSizeMaximum>
+					</nearbySelection>
+				</secondaryEntitySelector>
+			</swapMoveSelector>
+		</unionMoveSelector>
+
 
 	</localSearch>
 
 	<localSearch>
-		<pillarSwapMoveSelector>
-			<pillarSelector>
-				<subPillarEnabled>true</subPillarEnabled>
-				<minimumSubPillarSize>1</minimumSubPillarSize>
-				<maximumSubPillarSize>4</maximumSubPillarSize>
-			</pillarSelector>
-		</pillarSwapMoveSelector>
+
+		<moveIteratorFactory>
+			<moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass>
+		</moveIteratorFactory>
 
 	</localSearch>
+
+
+
+	-
+
+
+
+
+
+
+	<!-- <localSearch> <pillarSwapMoveSelector> <pillarSelector> <subPillarEnabled>true</subPillarEnabled> <minimumSubPillarSize>1</minimumSubPillarSize> 
+		<maximumSubPillarSize>4</maximumSubPillarSize> </pillarSelector> </pillarSwapMoveSelector> </localSearch> -->
+
+
+
 
 
 </solver>

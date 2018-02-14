@@ -3,7 +3,6 @@ package com.rhc.gerrymandering.domain;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
-@PlanningEntity
 public class ZipCode {
 
 	private int zipCode;

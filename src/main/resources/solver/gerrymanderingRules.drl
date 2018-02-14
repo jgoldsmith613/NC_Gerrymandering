@@ -1,8 +1,11 @@
 import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScoreHolder;
-import com.rhc.gerrymandering.domain.ZipCode;
+import com.rhc.gerrymandering.domain.Block;
 import com.rhc.gerrymandering.domain.SumationInfo;
 import com.rhc.gerrymandering.domain.DistancePair;
 import com.rhc.gerrymandering.domain.ZipCodeDistances;
+
+import accumulate com.rhc.gerrymandering.domain.PolygonCountAccumulate difference
+
 
 
 
@@ -23,11 +26,11 @@ when
      $district: Integer()
      SumationInfo($average: averagePerDistrict)
      $populationSum: Long() from accumulate(
-         ZipCode( district == $district, $population: population),
+         Block( district == $district, $population: population),
          sum($population)
      )
 then        
-        scoreHolder.addConstraintMatch(kcontext, -(($populationSum-$average)*($populationSum-$average)));
+        scoreHolder.addConstraintMatch(kcontext, -10*(($populationSum-$average)*($populationSum-$average)));
 end
 
 /*rule "minimizing Latitude  and Long Varience"
@@ -50,37 +53,106 @@ then
         
 end*/
 
-rule "minimizing Latitude Varience"
+rule "minimizing Latitude Varience"  
 when
      $district: Integer()
      accumulate(
-         ZipCode( district == $district, $lat: expandedLat),
+         Block( district == $district, $lat: expandedLat),
          $latVariance: variance($lat)
      )
-then
-        scoreHolder.addConstraintMatch(kcontext, -(10*$latVariance.longValue()));
+then 
         if($latVariance.longValue() == 0 ){
-                scoreHolder.addConstraintMatch(kcontext, -1000000000000L);
+               scoreHolder.addConstraintMatch(kcontext, -100000000000L);
+        }else{
+                scoreHolder.addConstraintMatch(kcontext, -($latVariance.longValue()));
+        
         }
         
 end 
 
 
 
-rule "minimizing Long Varience"
+rule "minimizing Long Varience"  
 when
      $district: Integer()
      accumulate(
-         ZipCode( district == $district, $long: expandedLong),
+         Block( district == $district, $long: expandedLong),
          $longVariance: variance($long) 
      )
 then
-        scoreHolder.addConstraintMatch(kcontext, -(10*$longVariance.longValue()));
         if($longVariance.longValue() == 0){                
-                scoreHolder.addConstraintMatch(kcontext, -1000000000000L);
+                scoreHolder.addConstraintMatch(kcontext, -100000000000L);
+        }else{
+                scoreHolder.addConstraintMatch(kcontext, -($longVariance.longValue()));
+        
         }
         
 end
+
+
+/*rule "minimizing Long Varkjkjience"  
+when
+     $district: Integer()
+     accumulate(
+         Block( district == $district, $long: expandedLong ),
+         $longMax: max($long)
+     )
+then
+       
+       
+              if($longMax != null){
+       
+                scoreHolder.addConstraintMatch(kcontext, -1* ((Long)$longMax)  );
+                
+                }
+                
+        
+        
+        
+end
+
+rule "minimizing Long Varkjdsffdskjience"  
+when
+     $district: Integer()
+     accumulate(
+         Block( district == $district, $lat: expandedLat),
+         $latMin: min($lat)
+     )
+then
+       
+       if($latMin != null){
+       
+       
+                scoreHolder.addConstraintMatch(kcontext, -1* ((Long) $latMin) );
+        }
+                
+        
+        
+        
+end*/
+
+/*rule "temp"
+when
+     $district: Integer()
+     accumulate(
+         Block( district == $district, $polygon: polygon),
+         $longVariance: difference($polygon) 
+     )
+then
+        scoreHolder.addConstraintMatch(kcontext, -($longVariance*$longVariance));
+        
+        
+end*/
+
+/*rule "maximize touching"
+when
+    Block( district != null, $district: district, $polygon: polygon, $blockId: blockId )
+    exists Block( blockId != $blockId, district == $district, polygon.touches($polygon))
+
+then
+        scoreHolder.addConstraintMatch(kcontext, 100);
+
+end*/
 
 
 /*rule "distance minimizing"
