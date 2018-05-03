@@ -1,0 +1,24 @@
+import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScoreHolder;
+import com.rhc.gerrymandering.domain.Block;
+import com.rhc.gerrymandering.domain.DistrictPoint;
+import com.rhc.gerrymandering.domain.SumationInfo;
+import com.rhc.gerrymandering.domain.DistancePair;
+import com.rhc.gerrymandering.domain.ZipCodeDistances;
+
+import accumulate com.rhc.gerrymandering.domain.PolygonCountAccumulate difference
+
+global SimpleLongScoreHolder scoreHolder;
+
+
+rule "sample"
+when
+     $district: Integer()
+     accumulate(
+         Block( district == $district, $polygon: polygon),
+         $count: difference($polygon) 
+     )
+then
+        scoreHolder.addConstraintMatch(kcontext, -($count*$count));
+        
+        
+end

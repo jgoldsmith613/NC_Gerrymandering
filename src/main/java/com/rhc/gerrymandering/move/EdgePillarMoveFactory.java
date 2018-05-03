@@ -13,6 +13,7 @@ import org.optaplanner.core.impl.heuristic.selector.common.nearby.NearbyDistance
 import org.optaplanner.core.impl.heuristic.selector.common.nearby.ParabolicDistributionNearbyRandom;
 import org.optaplanner.core.impl.heuristic.selector.move.factory.MoveIteratorFactory;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
+import org.optaplanner.core.impl.score.director.drools.DroolsScoreDirectorCopy;
 
 import com.rhc.gerrymandering.domain.Block;
 import com.rhc.gerrymandering.domain.BlockDistanceMeter;
@@ -71,16 +72,45 @@ public class EdgePillarMoveFactory implements MoveIteratorFactory<Gerrymandering
 				Collection<Block> destinationPiller = null;
 				while (randomDestination == null) {
 					randomOrigin = blocks.get(workingRandom.nextInt(blocks.size()));
-				
+
 					randomDestination = getNextDifferentBlock(randomOrigin);
 				}
 				int originPillarSize = workingRandom.nextInt(4) + 1;
-				int destinationPillarSize = workingRandom.nextInt(4) + 1;
 				originPiller = createPiller(randomOrigin, originPillarSize);
-				destinationPiller = createPiller(randomDestination, destinationPillarSize);
-				
+				long originPopulation = 0;
+				for (Block block : originPiller) {
+					originPopulation += block.getPopulation();
+				}
+				destinationPiller = createPillerByPopulation(randomDestination, originPopulation);
 
 				return new EdgeSubPillarMove(originPiller, destinationPiller);
+
+			}
+			
+			private Collection<Block> createPillerByPopulation(Block block, long originPopulation) {
+				Collection<Block> piller = new HashSet<Block>();
+				piller.add(block);
+				long population = block.getPopulation();
+				HashSet<Integer> used = new HashSet<Integer>();
+				int district = block.getDistrict();
+				int reps = 0;
+				while (population < originPopulation && reps < 30) {
+					int randomInt = parabolicRandom.nextInt(workingRandom, Integer.MAX_VALUE) + 1;
+					while (used.contains(randomInt) || randomInt == 0) {
+						randomInt = (randomInt + 1) % max;
+						if (used.size() == max - 1) {
+							return piller;
+						}
+					}
+					used.add(randomInt);
+					Block potential = (Block) matrix.getDestination(block, randomInt);
+					if (potential.getDistrict() == district) {
+						piller.add(potential);
+						population+=block.getPopulation();
+					}
+					reps++;
+				}
+				return piller;
 
 			}
 
@@ -89,13 +119,13 @@ public class EdgePillarMoveFactory implements MoveIteratorFactory<Gerrymandering
 				piller.add(block);
 				HashSet<Integer> used = new HashSet<Integer>();
 				int district = block.getDistrict();
-                int reps = 0;
-				while(piller.size() < pillarSize && reps < 30){
-					//Max value wont matter since value set above
+				int reps = 0;
+				while (piller.size() < pillarSize && reps < 30) {
+					// Max value wont matter since value set above
 					int randomInt = parabolicRandom.nextInt(workingRandom, Integer.MAX_VALUE) + 1;
-					while (used.contains(randomInt) || randomInt == 0 ) {
+					while (used.contains(randomInt) || randomInt == 0) {
 						randomInt = (randomInt + 1) % max;
-						if(used.size() == max - 1){
+						if (used.size() == max - 1) {
 							return piller;
 						}
 					}
@@ -106,8 +136,7 @@ public class EdgePillarMoveFactory implements MoveIteratorFactory<Gerrymandering
 					}
 					reps++;
 				}
-				
-				
+
 				return piller;
 
 			}
@@ -123,9 +152,9 @@ public class EdgePillarMoveFactory implements MoveIteratorFactory<Gerrymandering
 
 					// max value set lower than global max for single swap
 					int randomInt = parabolicRandom.nextInt(workingRandom, localMax) + 1;
-					while (used.contains(randomInt) || randomInt == 0 ) {
+					while (used.contains(randomInt) || randomInt == 0) {
 						randomInt = (randomInt + 1) % localMax;
-						if(used.size() == localMax - 1){
+						if (used.size() == localMax - 1) {
 							return null;
 						}
 					}

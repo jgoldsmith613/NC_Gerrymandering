@@ -9,14 +9,16 @@
 	<!-- Score configuration -->
 	t
 	<scoreDirectorFactory>
-		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
+		<scoreDrl>solver/polygonAccumulateRules.drl</scoreDrl>
 		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-		<!-- <kieBaseConfigurationProperties> <drools.equalityBehavior>EQUALITY</drools.equalityBehavior> </kieBaseConfigurationProperties> -->
+		<kieBaseConfigurationProperties>
+			<drools.equalityBehavior>EQUALITY</drools.equalityBehavior>
+		</kieBaseConfigurationProperties>
 	</scoreDirectorFactory>
 
 	<!-- Optimization algorithms configuration -->
 	<termination>
-		<minutesSpentLimit>7</minutesSpentLimit>
+		<minutesSpentLimit>4</minutesSpentLimit>
 	</termination>
 
 
@@ -24,17 +26,8 @@
 	<constructionHeuristic />
 	<localSearch>
 
-
-		<!-- <localSearchType>LATE_ACCEPTANCE</localSearchType> -->
-
-		<acceptor>
-			<entityTabuRatio>0.02</entityTabuRatio>
-		</acceptor>
-		<forager>
-			<acceptedCountLimit>1000</acceptedCountLimit>
-		</forager>
 		<termination>
-			<minutesSpentLimit>4</minutesSpentLimit>
+			<minutesSpentLimit>20</minutesSpentLimit>
 		</termination>
 
 		<changeMoveSelector />
@@ -43,13 +36,6 @@
 		<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
 		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> </forager> -->
 	</localSearch>
-
-	<!-- <localSearch> <unionMoveSelector> <changeMoveSelector /> <moveIteratorFactory> <moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass> 
-		</moveIteratorFactory> </unionMoveSelector> </localSearch> -->
-
-
-
-
 
 	<localSearch>
 
@@ -84,6 +70,12 @@
 
 
 	</localSearch>
+
+
+
+
+
+	-
 
 
 

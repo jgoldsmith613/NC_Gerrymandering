@@ -14,6 +14,7 @@ public class PolygonCountContext implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Geometry union;
+	private Geometry origin;
 
 	public Geometry getUnion() {
 		return union;
@@ -21,23 +22,26 @@ public class PolygonCountContext implements Serializable {
 
 	public void setUnion(Geometry union) {
 		this.union = union;
+		this.origin = union;
 	}
-	
-	public void add(Geometry geometry){
+
+	public void add(Geometry geometry) {
 		this.union = union.union(geometry);
 	}
-	
-	public void remove(Geometry geometry){
+
+	public void remove(Geometry geometry) {
 		this.union = union.difference(geometry);
 	}
-	
-	public int count(){
-		if(union == null){
+
+	public int count() {
+		if (union == null) {
 			return 0;
 		}
 		return union.getNumGeometries();
 	}
 
-
+	public Geometry getOrigin() {
+		return origin;
+	}
 
 }

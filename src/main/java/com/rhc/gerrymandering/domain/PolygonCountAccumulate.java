@@ -3,11 +3,15 @@ package com.rhc.gerrymandering.domain;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.kie.api.runtime.rule.AccumulateFunction;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 
 public class PolygonCountAccumulate implements AccumulateFunction<PolygonCountContext> {
 
@@ -41,12 +45,12 @@ public class PolygonCountAccumulate implements AccumulateFunction<PolygonCountCo
 
 	@Override
 	public Object getResult(PolygonCountContext context) throws Exception {
-		return Long.valueOf(context.count());
+		return context.getUnion().getNumGeometries();
 	}
 
 	@Override
 	public Class<?> getResultType() {
-		return Long.class;
+		return Integer.class;
 	}
 
 	@Override

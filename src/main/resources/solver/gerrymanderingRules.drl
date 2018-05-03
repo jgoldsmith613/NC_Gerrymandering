@@ -1,5 +1,6 @@
 import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScoreHolder;
 import com.rhc.gerrymandering.domain.Block;
+import com.rhc.gerrymandering.domain.DistrictPoint;
 import com.rhc.gerrymandering.domain.SumationInfo;
 import com.rhc.gerrymandering.domain.DistancePair;
 import com.rhc.gerrymandering.domain.ZipCodeDistances;
@@ -88,6 +89,21 @@ then
         }
         
 end
+
+
+
+/*rule "inserting centroid"  
+when
+     $district: Integer()
+     accumulate(
+         Block( district == $district, $lat: latitude, $long: longitude),
+         $avgLat: average($lat),
+         $avgLong: average($long)
+        )
+then
+       insertLogical(new DistrictPoint($avgLat, $avgLong));
+        
+end*/
 
 
 /*rule "minimizing Long Varkjkjience"  

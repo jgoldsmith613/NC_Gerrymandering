@@ -9,7 +9,10 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -32,14 +35,17 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
+import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
 import org.optaplanner.core.api.score.constraint.ConstraintMatchTotal;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
+import org.optaplanner.core.api.solver.event.SolverEventListener;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 import com.rhc.gerrymandering.domain.Block;
 import com.rhc.gerrymandering.domain.GerrymanderingSolution;
-import com.rhc.gerrymandering.domain.ZipCode;
+import com.rhc.gerrymandering.drawing.PausingMapPaneListener;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
 public class GerrymanderingApp {
@@ -47,10 +53,18 @@ public class GerrymanderingApp {
 	// getting wierd error from geo libary on return so doing this temporarily
 	public static Collection<Block> blocks = null;
 
-	public static void main(String[] args) throws IOException {
+	public static JMapFrame frame;
+
+	public static void main(String[] args) throws IOException, InterruptedException {
+
+		//List<String> scores = new ArrayList<String>();
+		//List<GerrymanderingSolution> solutions = new ArrayList<GerrymanderingSolution>();
 
 		SolverFactory<GerrymanderingSolution> solverFactory = SolverFactory
 				.createFromXmlResource("solver/gerrymanderingSolverConfig.xml");
+
+		PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);
+
 		Solver<GerrymanderingSolution> solver = solverFactory.buildSolver();
 
 		GerrymanderingSolution solution = new GerrymanderingSolution();
@@ -61,10 +75,39 @@ public class GerrymanderingApp {
 			System.out.println("I got an exception");
 		}
 		solution.setBlock(blocks);
+
+		// PlannerBenchmark plannerBenchmark =
+		// benchmarkFactory.buildPlannerBenchmark(solution);
+		// plannerBenchmark.benchmark();
+
 		// Solve the problem
-		GerrymanderingSolution solverPlan = solver.solve(solution);
+
+		solver.addEventListener(new SolverEventListener<GerrymanderingSolution>() {
+			public void bestSolutionChanged(BestSolutionChangedEvent<GerrymanderingSolution> event) {
+				//scores.add(event.getNewBestScore().toString());
+				//solutions.add(event.getNewBestSolution());
+				createMap(event.getNewBestSolution().getBlocks(), event.getNewBestScore().toString(), null);
+			}
+		});
+
+		RunnableSolver runnableSolver = new RunnableSolver(solver, solution);
+		Thread solvingTread = new Thread(runnableSolver);
+		solvingTread.start();
+		while (solvingTread.isAlive()) {
+			solvingTread.join(1000);
+		}
+
+		// GerrymanderingSolution solverPlan = solver.solve(solution);
+
+		// SolverFactory<GerrymanderingSolution> solverFactory2 = SolverFactory
+		// .createFromXmlResource("solver/gerrymanderingSolverConfigPoly.xml");
+		// Solver<GerrymanderingSolution> solver2 =
+		// solverFactory2.buildSolver();
+
+		// solverPlan = solver2.solve(solverPlan);
 
 		ScoreDirector<GerrymanderingSolution> sd = solver.getScoreDirectorFactory().buildScoreDirector();
+		GerrymanderingSolution solverPlan = runnableSolver.getFinalSolution();
 		sd.setWorkingSolution(solverPlan);
 
 		for (ConstraintMatchTotal match : sd.getConstraintMatchTotals()) {
@@ -82,14 +125,18 @@ public class GerrymanderingApp {
 		// IOUtils.save(solverPlan.getZipCodes());
 
 		printSumation(solverPlan.getBlocks());
+		
+		createMap(solverPlan.getBlocks(), solverPlan.getScore().toString(), null);
 
-		createMap(solverPlan.getBlocks(), null);
-
+		//frame = null;
+		//createMap(solutions.get(0).getBlocks(), scores.get(0), null);
+		//frame = null;
+		//createMap(solutions.get(1).getBlocks(), scores.get(1), null);
 		// printSumation(solution.getZipCodes());
 
 	}
 
-	private static void createMap(Collection<Block> blocks, Collection<Block> empty) {
+	private static void createMap(Collection<Block> blocks, String score, Collection<Block> empty) {
 
 		Map<Integer, DefaultFeatureCollection> layers = new HashMap<Integer, DefaultFeatureCollection>();
 
@@ -110,7 +157,7 @@ public class GerrymanderingApp {
 		 */
 
 		MapContent vMap = new MapContent();
-		vMap.setTitle("StyleLab");
+		vMap.setTitle(score);
 
 		// Create a basic Style to render the features
 		// Style style = createStyle(file, featureSource);
@@ -135,8 +182,18 @@ public class GerrymanderingApp {
 
 		}
 
+		if (frame == null) {
+			frame = showMap();
+			frame.getMapPane().addMapPaneListener(new PausingMapPaneListener(frame.getMapPane()));
+		}
+
 		// Now display the map
-		JMapFrame.showMap(vMap);
+		MapContent old = frame.getMapContent();
+		frame.setTitle(score);
+		frame.setMapContent(vMap);
+		if (old != null) {
+			old.dispose();
+		}
 
 	}
 
@@ -209,9 +266,7 @@ public class GerrymanderingApp {
 			 * System.exit(1); }
 			 */
 
-
 			dataStore.dispose();
-
 
 			GerrymanderingApp.blocks = blocks;
 
@@ -261,6 +316,50 @@ public class GerrymanderingApp {
 		}
 
 		System.out.println(districtPops);
+
+	}
+
+	public static JMapFrame showMap() {
+		JMapFrame frame = new JMapFrame();
+		frame.enableStatusBar(true);
+		frame.enableToolBar(true);
+		frame.initComponents();
+
+		frame.setSize(1200, 800);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				frame.setVisible(true);
+			}
+		});
+
+		return frame;
+	}
+
+	public static class RunnableSolver implements Runnable {
+
+		private Solver<GerrymanderingSolution> solver;
+		private GerrymanderingSolution solution;
+		private GerrymanderingSolution finalSolution;
+
+		public RunnableSolver(Solver<GerrymanderingSolution> solver, GerrymanderingSolution solution) {
+			this.solver = solver;
+			this.solution = solution;
+		}
+
+		@Override
+		public void run() {
+			setFinalSolution(solver.solve(solution));
+
+		}
+
+		public GerrymanderingSolution getFinalSolution() {
+			return finalSolution;
+		}
+
+		public void setFinalSolution(GerrymanderingSolution finalSolution) {
+			this.finalSolution = finalSolution;
+		}
 
 	}
 }
