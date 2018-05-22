@@ -11,9 +11,7 @@ public class Block {
 	
 	@Override
 	public String toString() {
-		return "Block [blockId=" + blockId + ", population=" + population + ", latitude=" + latitude + ", longitude="
-				+ longitude + ", expandedLat=" + expandedLat + ", expandedLong=" + expandedLong + ", polygon=" + polygon
-				+ ", feature=" + feature + ", district=" + district + "]";
+		return "Block-" + blockId;
 	}
 
 	private String  blockId;

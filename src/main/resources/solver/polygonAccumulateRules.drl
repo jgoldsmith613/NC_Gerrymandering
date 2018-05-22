@@ -6,6 +6,7 @@ import com.rhc.gerrymandering.domain.DistancePair;
 import com.rhc.gerrymandering.domain.ZipCodeDistances;
 
 import accumulate com.rhc.gerrymandering.domain.PolygonCountAccumulate difference
+import accumulate com.rhc.gerrymandering.app.VarianceAccumulateFunction variance
 
 global SimpleLongScoreHolder scoreHolder;
 

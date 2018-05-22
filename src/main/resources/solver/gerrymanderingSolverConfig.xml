@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <solver>
-	<!-- <environmentMode>FAST_ASSERT</environmentMode> -->
+	<!-- <environmentMode>FULL_ASSERT</environmentMode> -->
 
 	<scanAnnotatedClasses />
+
 
 
 	<!-- Score configuration -->
@@ -11,12 +12,13 @@
 	<scoreDirectorFactory>
 		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
 		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+
 		<!-- <kieBaseConfigurationProperties> <drools.equalityBehavior>EQUALITY</drools.equalityBehavior> </kieBaseConfigurationProperties> -->
 	</scoreDirectorFactory>
 
 	<!-- Optimization algorithms configuration -->
 	<termination>
-		<minutesSpentLimit>7</minutesSpentLimit>
+		<minutesSpentLimit>8</minutesSpentLimit>
 	</termination>
 
 
@@ -26,12 +28,14 @@
 
 
 		<!-- <localSearchType>LATE_ACCEPTANCE</localSearchType> -->
+		<!-- <acceptor> <lateAcceptanceSize>100</lateAcceptanceSize> </acceptor> <forager> <acceptedCountLimit>1</acceptedCountLimit> 
+			</forager> -->
 
 		<acceptor>
 			<entityTabuRatio>0.02</entityTabuRatio>
 		</acceptor>
 		<forager>
-			<acceptedCountLimit>1000</acceptedCountLimit>
+			<acceptedCountLimit>750</acceptedCountLimit>
 		</forager>
 		<termination>
 			<minutesSpentLimit>4</minutesSpentLimit>
@@ -52,7 +56,7 @@
 
 
 	<localSearch>
-
+		
 
 
 		<unionMoveSelector>

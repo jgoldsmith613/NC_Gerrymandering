@@ -15,31 +15,24 @@ import org.optaplanner.core.api.score.buildin.simplelong.SimpleLongScore;
 public class GerrymanderingSolution {
 
 	private SimpleLongScore score;
+	private SumationInfo sumationInfo;
 
 	@PlanningEntityCollectionProperty
 	private Collection<Block> blocks = new ArrayList<Block>();
-	
-	
-	
-    public GerrymanderingSolution(){
 
-    }
+	public GerrymanderingSolution() {
+
+	}
 
 	@ValueRangeProvider(id = "districts")
 	@ProblemFactCollectionProperty
 	private Integer[] districts = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-	
-	
+
 	@ProblemFactProperty
-	public SumationInfo getSumationInfo(){
-		long population = 0;
-		for(Block blocks: blocks){
-			population+= blocks.getPopulation();
-		}
-		
-		return new SumationInfo(population, ((double)population)/districts.length);
+	public SumationInfo getSumationInfo() {
+		return sumationInfo;
 	}
-	
+
 	@PlanningScore
 	public SimpleLongScore getScore() {
 		return score;
@@ -57,6 +50,13 @@ public class GerrymanderingSolution {
 		this.blocks = blocks;
 	}
 
-	
+	public void createSumationInfo() {
+		long population = 0;
+		for (Block blocks : blocks) {
+			population += blocks.getPopulation();
+		}
+
+		sumationInfo = new SumationInfo(population, ((double) population) / districts.length);
+	}
 
 }

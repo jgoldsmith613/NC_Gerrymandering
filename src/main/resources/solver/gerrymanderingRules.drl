@@ -6,6 +6,9 @@ import com.rhc.gerrymandering.domain.DistancePair;
 import com.rhc.gerrymandering.domain.ZipCodeDistances;
 
 import accumulate com.rhc.gerrymandering.domain.PolygonCountAccumulate difference
+import accumulate com.rhc.gerrymandering.app.LoadBalanceAccumulateFunction loadBalance;
+import accumulate com.rhc.gerrymandering.app.VarianceAccumulateFunction variance2
+
 
 
 
@@ -59,15 +62,21 @@ when
      $district: Integer()
      accumulate(
          Block( district == $district, $lat: expandedLat),
-         $latVariance: variance($lat)
+         $result: variance2($lat)
      )
 then 
-        if($latVariance.longValue() == 0 ){
-               scoreHolder.addConstraintMatch(kcontext, -100000000000L);
+
+       //System.out.println("district: " + $district + ", variance: " + $result + " " + kcontext);
+       if($result.equals(Double.NaN) ){
+              scoreHolder.addConstraintMatch(kcontext, -100000000000L);
         }else{
-                scoreHolder.addConstraintMatch(kcontext, -($latVariance.longValue()));
+                scoreHolder.addConstraintMatch(kcontext, -($result.longValue()));
         
         }
+       
+      // scoreHolder.addConstraintMatch(kcontext, - (long) $result.getMeanDeviationSquaredSumRoot(100));
+        
+        
         
 end 
 
@@ -78,15 +87,18 @@ when
      $district: Integer()
      accumulate(
          Block( district == $district, $long: expandedLong),
-         $longVariance: variance($long) 
+         $result: variance2($long) 
      )
 then
-        if($longVariance.longValue() == 0){                
-                scoreHolder.addConstraintMatch(kcontext, -100000000000L);
-        }else{
-                scoreHolder.addConstraintMatch(kcontext, -($longVariance.longValue()));
+       if($result.equals(Double.NaN)){          
+              scoreHolder.addConstraintMatch(kcontext, -100000000000L);
+       }else{
+             scoreHolder.addConstraintMatch(kcontext, -($result.longValue()));
         
         }
+       
+            //  scoreHolder.addConstraintMatch(kcontext, - (long) $result.getMeanDeviationSquaredSumRoot(100));
+       
         
 end
 

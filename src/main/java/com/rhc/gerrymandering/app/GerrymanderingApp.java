@@ -11,6 +11,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.SwingUtilities;
 
@@ -55,10 +59,18 @@ public class GerrymanderingApp {
 
 	public static JMapFrame frame;
 
+	public static Integer lock = 1;
+
+	// public static ExecutorService mapService =
+	// Executors.newSingleThreadExecutor();
+
+	public static LinkedBlockingQueue<GerrymanderingSolution> queue = new LinkedBlockingQueue<GerrymanderingSolution>();
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-		//List<String> scores = new ArrayList<String>();
-		//List<GerrymanderingSolution> solutions = new ArrayList<GerrymanderingSolution>();
+		// List<String> scores = new ArrayList<String>();
+		// List<GerrymanderingSolution> solutions = new
+		// ArrayList<GerrymanderingSolution>();
 
 		SolverFactory<GerrymanderingSolution> solverFactory = SolverFactory
 				.createFromXmlResource("solver/gerrymanderingSolverConfig.xml");
@@ -75,6 +87,7 @@ public class GerrymanderingApp {
 			System.out.println("I got an exception");
 		}
 		solution.setBlock(blocks);
+		solution.createSumationInfo();
 
 		// PlannerBenchmark plannerBenchmark =
 		// benchmarkFactory.buildPlannerBenchmark(solution);
@@ -84,15 +97,51 @@ public class GerrymanderingApp {
 
 		solver.addEventListener(new SolverEventListener<GerrymanderingSolution>() {
 			public void bestSolutionChanged(BestSolutionChangedEvent<GerrymanderingSolution> event) {
-				//scores.add(event.getNewBestScore().toString());
-				//solutions.add(event.getNewBestSolution());
-				createMap(event.getNewBestSolution().getBlocks(), event.getNewBestScore().toString(), null);
+				// scores.add(event.getNewBestScore().toString());
+				// solutions.add(event.getNewBestSolution());
+
+				/*
+				 * mapService.execute(new Runnable() {
+				 * 
+				 * @Override public void run() {
+				 * createMap(event.getNewBestSolution().getBlocks(),
+				 * event.getNewBestScore().toString(), null); } });
+				 */
+
+				queue.add(event.getNewBestSolution());
+
 			}
 		});
 
 		RunnableSolver runnableSolver = new RunnableSolver(solver, solution);
 		Thread solvingTread = new Thread(runnableSolver);
+		solvingTread.setPriority(Thread.MAX_PRIORITY);
+
+		Thread mappingThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					while (solvingTread.isAlive()) {
+						GerrymanderingSolution next = queue.take();
+						while(queue.peek() != null){
+							next = queue.poll();
+						}
+					
+						createMap(next.getBlocks(), next.getScore().toString(), null);
+						//Thread.sleep(400);
+					}
+
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
 		solvingTread.start();
+		mappingThread.start();
+
 		while (solvingTread.isAlive()) {
 			solvingTread.join(1000);
 		}
@@ -125,13 +174,13 @@ public class GerrymanderingApp {
 		// IOUtils.save(solverPlan.getZipCodes());
 
 		printSumation(solverPlan.getBlocks());
-		
+
 		createMap(solverPlan.getBlocks(), solverPlan.getScore().toString(), null);
 
-		//frame = null;
-		//createMap(solutions.get(0).getBlocks(), scores.get(0), null);
-		//frame = null;
-		//createMap(solutions.get(1).getBlocks(), scores.get(1), null);
+		// frame = null;
+		// createMap(solutions.get(0).getBlocks(), scores.get(0), null);
+		// frame = null;
+		// createMap(solutions.get(1).getBlocks(), scores.get(1), null);
 		// printSumation(solution.getZipCodes());
 
 	}
@@ -182,18 +231,28 @@ public class GerrymanderingApp {
 
 		}
 
+		// synchronized (lock) {
+
 		if (frame == null) {
 			frame = showMap();
 			frame.getMapPane().addMapPaneListener(new PausingMapPaneListener(frame.getMapPane()));
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		// Now display the map
 		MapContent old = frame.getMapContent();
+		
 		frame.setTitle(score);
 		frame.setMapContent(vMap);
 		if (old != null) {
 			old.dispose();
 		}
+		// }
 
 	}
 
@@ -216,6 +275,8 @@ public class GerrymanderingApp {
 
 		Collection<Block> blocks = new ArrayList<Block>();
 		Collection<Block> empty = new ArrayList<Block>();
+		
+	
 
 		File file = new File("/home/justin/Downloads/2010/bg/tl_2010_37_bg10.shp");
 		// File file = new
@@ -325,7 +386,7 @@ public class GerrymanderingApp {
 		frame.enableToolBar(true);
 		frame.initComponents();
 
-		frame.setSize(1200, 800);
+		frame.setSize(2400, 1600);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
