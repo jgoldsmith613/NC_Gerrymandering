@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <solver>
-	<!-- <environmentMode>FULL_ASSERT</environmentMode> -->
+	<!-- <environmentMode>FAST_ASSERT</environmentMode> -->
 
 	<scanAnnotatedClasses />
-
 
 
 	<!-- Score configuration -->
 	t
 	<scoreDirectorFactory>
-		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
+		<scoreDrl>solver/polygonAccumulateRules.drl</scoreDrl>
 		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-
-		<!-- <kieBaseConfigurationProperties> <drools.equalityBehavior>EQUALITY</drools.equalityBehavior> </kieBaseConfigurationProperties> -->
+		<kieBaseConfigurationProperties>
+			<drools.equalityBehavior>EQUALITY</drools.equalityBehavior>
+		</kieBaseConfigurationProperties>
 	</scoreDirectorFactory>
 
 	<!-- Optimization algorithms configuration -->
 	<termination>
-		<minutesSpentLimit>8</minutesSpentLimit>
+		<minutesSpentLimit>4</minutesSpentLimit>
 	</termination>
 
 
@@ -26,19 +26,8 @@
 	<constructionHeuristic />
 	<localSearch>
 
-
-		<!-- <localSearchType>LATE_ACCEPTANCE</localSearchType> -->
-		<!-- <acceptor> <lateAcceptanceSize>100</lateAcceptanceSize> </acceptor> <forager> <acceptedCountLimit>1</acceptedCountLimit> 
-			</forager> -->
-
-		<acceptor>
-			<entityTabuRatio>0.02</entityTabuRatio>
-		</acceptor>
-		<forager>
-			<acceptedCountLimit>750</acceptedCountLimit>
-		</forager>
 		<termination>
-			<minutesSpentLimit>4</minutesSpentLimit>
+			<minutesSpentLimit>20</minutesSpentLimit>
 		</termination>
 
 		<changeMoveSelector />
@@ -48,15 +37,8 @@
 		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> </forager> -->
 	</localSearch>
 
-	<!-- <localSearch> <unionMoveSelector> <changeMoveSelector /> <moveIteratorFactory> <moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass> 
-		</moveIteratorFactory> </unionMoveSelector> </localSearch> -->
-
-
-
-
-
 	<localSearch>
-		
+
 
 
 		<unionMoveSelector>
@@ -88,6 +70,12 @@
 
 
 	</localSearch>
+
+
+
+
+
+	-
 
 
 
