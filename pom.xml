@@ -23,7 +23,7 @@
 				<artifactId>kie-platform-bom</artifactId>
 				<type>pom</type>
 				<!-- Keep in sync with part of project version -->
-				<version>7.5.0.Final</version>
+				<version>7.8.0.Final</version>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
