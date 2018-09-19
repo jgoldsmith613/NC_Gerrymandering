@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.rhc</groupId>
-	<artifactId>gerrymandering</artifactId>
+	<artifactId>co-gerrymandering</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>gerrymandering</name>
+	<name>CO Gerrymandering</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -23,7 +23,7 @@
 				<artifactId>kie-platform-bom</artifactId>
 				<type>pom</type>
 				<!-- Keep in sync with part of project version -->
-				<version>7.5.0.Final</version>
+				<version>7.11.0.Final</version>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>

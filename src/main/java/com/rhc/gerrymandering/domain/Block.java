@@ -2,6 +2,7 @@ package com.rhc.gerrymandering.domain;
 
 import org.opengis.feature.simple.SimpleFeature;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -14,6 +15,7 @@ public class Block {
 		return "Block-" + blockId;
 	}
 
+	@PlanningId()
 	private String  blockId;
 	private long population;
 	private double latitude;

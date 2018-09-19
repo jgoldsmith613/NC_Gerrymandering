@@ -9,7 +9,6 @@ public class tempTest {
 		Double one = new Double(1);
 		Double two = new Double(0);
 		Double three = new Double(3);
-
 		
 		Double answer = one/two;
 		
@@ -35,7 +34,6 @@ public class tempTest {
 		
 		System.out.println(c);
 		System.out.println(Double.isNaN(c));
-		
 	}
 
 }

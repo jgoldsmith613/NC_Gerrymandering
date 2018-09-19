@@ -1,0 +1,104 @@
+GEO.id,Id
+GEO.id2,Id2
+GEO.display-label,Geography
+VD002,RECORD CODES - File Identification
+VD003,RECORD CODES - State/US-Abbreviation (USPS)
+VD004,RECORD CODES - Summary Level
+VD005,RECORD CODES - Geographic Component
+VD006,RECORD CODES - Characteristic Iteration
+VD007,RECORD CODES - Characteristic Iteration File Sequence Number
+VD008,RECORD CODES - Logical Record Number
+VD010,GEOGRAPHIC AREA CODES - Region
+VD011,GEOGRAPHIC AREA CODES - Division
+VD012,GEOGRAPHIC AREA CODES - State (FIPS)
+VD013,GEOGRAPHIC AREA CODES - County
+VD014,GEOGRAPHIC AREA CODES - FIPS County Class Code
+VD015,GEOGRAPHIC AREA CODES - County Size Code
+VD016,GEOGRAPHIC AREA CODES - County Subdivision (FIPS)
+VD017,GEOGRAPHIC AREA CODES - FIPS County Subdivision Class Code
+VD018,GEOGRAPHIC AREA CODES - County Subdivision Size Code
+VD019,GEOGRAPHIC AREA CODES - Place (FIPS)
+VD020,GEOGRAPHIC AREA CODES - FIPS Place Class Code
+VD021,GEOGRAPHIC AREA CODES - Place Size Code
+VD022,GEOGRAPHIC AREA CODES - Census Tract
+VD023,GEOGRAPHIC AREA CODES - Block Group
+VD024,GEOGRAPHIC AREA CODES - Block
+VD025,GEOGRAPHIC AREA CODES - Internal Use Code
+VD026,GEOGRAPHIC AREA CODES - Consolidated City (FIPS)
+VD027,GEOGRAPHIC AREA CODES - FIPS Consolidated City Class Code
+VD028,GEOGRAPHIC AREA CODES - Consolidated City Size Code
+VD029,GEOGRAPHIC AREA CODES - American Indian Area/Alaska Native Area/Hawaiian Home Land (Census)
+VD030,GEOGRAPHIC AREA CODES - American Indian Area/Alaska Native Area/Hawaiian Home Land (FIPS)
+VD031,GEOGRAPHIC AREA CODES - FIPS American Indian Area/Alaska Native Area/Hawaiian Home Land Class Code
+VD032,GEOGRAPHIC AREA CODES - American Indian Trust Land/Hawaiian Home Land Indicator
+VD033,GEOGRAPHIC AREA CODES - American Indian Tribal Subdivision (Census)
+VD034,GEOGRAPHIC AREA CODES - American Indian Tribal Subdivision (FIPS)
+VD035,GEOGRAPHIC AREA CODES - FIPS American Indian Tribal Subdivision Class Code
+VD036,GEOGRAPHIC AREA CODES - Tribal Census Tract
+VD037,GEOGRAPHIC AREA CODES - Tribal Block Group
+VD038,GEOGRAPHIC AREA CODES - Alaska Native Regional Corporation (FIPS)
+VD039,GEOGRAPHIC AREA CODES - FIPS Alaska Native Regional Corporation Class Code
+VD040,GEOGRAPHIC AREA CODES - Metropolitan Statistical Area/Micropolitan Statistical Area
+VD041,GEOGRAPHIC AREA CODES - Metropolitan Statistical Area/Micropolitan Statistical Area Size Code
+VD042,GEOGRAPHIC AREA CODES - Metropolitan Division
+VD043,GEOGRAPHIC AREA CODES - Combined Statistical Area
+VD044,GEOGRAPHIC AREA CODES - New England City and Town Area
+VD045,GEOGRAPHIC AREA CODES - New England City and Town Area Size Code
+VD046,GEOGRAPHIC AREA CODES - New England City and Town Area Division
+VD047,GEOGRAPHIC AREA CODES - Combined New England City and Town Area
+VD048,GEOGRAPHIC AREA CODES - Metropolitan Statistical Area/Micropolitan Statistical Area Principal City Indicator
+VD049,GEOGRAPHIC AREA CODES - New England City and Town Area Principal City Indicator
+VD050,GEOGRAPHIC AREA CODES - Urban Area
+VD051,GEOGRAPHIC AREA CODES - Urban Area Size Code
+VD052,GEOGRAPHIC AREA CODES - Urban Area Type
+VD053,GEOGRAPHIC AREA CODES - Urban/Rural
+VD054,GEOGRAPHIC AREA CODES - Congressional District (111th)
+VD055,GEOGRAPHIC AREA CODES - State Legislative District (Upper Chamber) (Year 1)
+VD056,GEOGRAPHIC AREA CODES - State Legislative District (Lower Chamber) (Year 1)
+VD057,GEOGRAPHIC AREA CODES - Voting District
+VD058,GEOGRAPHIC AREA CODES - Voting District Indicator
+VD059,GEOGRAPHIC AREA CODES - Reserved
+VD060,GEOGRAPHIC AREA CODES - ZIP Code Tabulation Area (5 digit)
+VD061,GEOGRAPHIC AREA CODES - Subminor Civil Division (FIPS)
+VD062,GEOGRAPHIC AREA CODES - FIPS Subminor Civil Division Class Code
+VD063,GEOGRAPHIC AREA CODES - School District (Elementary)
+VD064,GEOGRAPHIC AREA CODES - School District (Secondary)
+VD065,GEOGRAPHIC AREA CODES - School District (Unified)
+VD067,AREA CHARACTERISTICS - Area (Land)
+VD068,AREA CHARACTERISTICS - Area (Water)
+VD069,AREA CHARACTERISTICS - Area Name-Legal/Statistical Area Description (LSAD) Term-Part Indicator
+VD070,AREA CHARACTERISTICS - Functional Status Code
+VD071,AREA CHARACTERISTICS - Geographic Change User Note Indicator
+VD072,AREA CHARACTERISTICS - Population Count (100%)
+VD073,AREA CHARACTERISTICS - Housing Unit Count (100%)
+VD074,AREA CHARACTERISTICS - Internal Point (Latitude)
+VD075,AREA CHARACTERISTICS - Internal Point (Longitude)
+VD076,AREA CHARACTERISTICS - Legal/Statistical Area Description Code
+VD077,AREA CHARACTERISTICS - Part Flag
+VD079,SPECIAL AREA CODES - Reserved
+VD080,SPECIAL AREA CODES - Urban Growth Area
+VD081,SPECIAL AREA CODES - State (ANSI)
+VD082,SPECIAL AREA CODES - County (ANSI)
+VD083,SPECIAL AREA CODES - County Subdivision (ANSI)
+VD084,SPECIAL AREA CODES - Place (ANSI)
+VD085,SPECIAL AREA CODES - Consolidated City (ANSI)
+VD086,SPECIAL AREA CODES - American Indian Area/Alaska Native Area/Hawaiian Home Land (ANSI)
+VD087,SPECIAL AREA CODES - American Indian Tribal Subdivision (ANSI)
+VD088,SPECIAL AREA CODES - Alaska Native Regional Corporation (ANSI)
+VD089,SPECIAL AREA CODES - Subminor Civil Division (ANSI)
+VD090,SPECIAL AREA CODES - Congressional District (113th)
+VD091,SPECIAL AREA CODES - Congressional District (114th)
+VD092,SPECIAL AREA CODES - Congressional District (115th)
+VD093,SPECIAL AREA CODES - State Legislative District (Upper Chamber) (Year 2)
+VD094,SPECIAL AREA CODES - State Legislative District (Upper Chamber) (Year 3)
+VD095,SPECIAL AREA CODES - State Legislative District (Upper Chamber) (Year 4)
+VD096,SPECIAL AREA CODES - State Legislative District (Lower Chamber) (Year 2)
+VD097,SPECIAL AREA CODES - State Legislative District (Lower Chamber) (Year 3)
+VD098,SPECIAL AREA CODES - State Legislative District (Lower Chamber) (Year 4)
+VD099,SPECIAL AREA CODES - American Indian Area/Alaska Native Area/Hawaiian Home Land Size Code
+VD100,SPECIAL AREA CODES - Combined Statistical Area Size Code
+VD101,SPECIAL AREA CODES - Combined NECTA Size Code
+VD102,SPECIAL AREA CODES - Metropolitan Micropolitan Indicator
+VD103,SPECIAL AREA CODES - NECTA Metropolitan Micropolitan Indicator
+VD104,SPECIAL AREA CODES - Public Use Microdata Area
+VD105,SPECIAL AREA CODES - Reserved

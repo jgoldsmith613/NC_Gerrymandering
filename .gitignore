@@ -30,3 +30,4 @@ local/*
 
 support_files/
 /target/
+.DS_Store

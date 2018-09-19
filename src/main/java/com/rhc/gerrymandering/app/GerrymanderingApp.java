@@ -9,11 +9,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.SwingUtilities;
@@ -39,7 +35,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
-import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
 import org.optaplanner.core.api.score.constraint.ConstraintMatchTotal;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
@@ -75,7 +70,7 @@ public class GerrymanderingApp {
 		SolverFactory<GerrymanderingSolution> solverFactory = SolverFactory
 				.createFromXmlResource("solver/gerrymanderingSolverConfig.xml");
 
-		PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);
+		//PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromSolverFactory(solverFactory);
 
 		Solver<GerrymanderingSolution> solver = solverFactory.buildSolver();
 
@@ -84,7 +79,8 @@ public class GerrymanderingApp {
 
 			createBlocks();
 		} catch (IllegalArgumentException e) {
-			System.out.println("I got an exception");
+			System.out.println("I got an exception\n" + e);
+			System.exit(1);
 		}
 		solution.setBlock(blocks);
 		solution.createSumationInfo();
@@ -220,7 +216,7 @@ public class GerrymanderingApp {
 		Stroke stroke = styleFactory.createStroke(filterFactory.literal(Color.BLACK), filterFactory.literal(0.1),
 				filterFactory.literal(0.1));
 
-		Color[] colors = createColors(13);
+		Color[] colors = createColors(7);
 		int i = 0;
 		for (Integer district : layers.keySet()) {
 			Fill fill = styleFactory.createFill(filterFactory.literal(colors[i]), filterFactory.literal(0.5));
@@ -271,14 +267,15 @@ public class GerrymanderingApp {
 	@SuppressWarnings("unchecked")
 	public static void createBlocks() throws IOException {
 
-		Map<String, Block> blockMap = readBlockInfo("/home/justin/Downloads/2010/bg/DEC_10_PL_G001_with_ann.csv");
+		Map<String, Block> blockMap = readBlockInfo("DEC_10_PL_G001_with_ann.csv");
 
 		Collection<Block> blocks = new ArrayList<Block>();
 		Collection<Block> empty = new ArrayList<Block>();
 		
 	
-
-		File file = new File("/home/justin/Downloads/2010/bg/tl_2010_37_bg10.shp");
+		ClassLoader classLoader = GerrymanderingApp.class.getClassLoader();
+		File file = new File(classLoader.getResource("tl_2010_08_bg10.shp").getFile());
+		//File file = new File("/Users/jjarae/source/bpms/demos/optaplanner/CO_Gerrymandering/src/main/resources/tl_2010_08_bg10.shp");
 		// File file = new
 		// File("/home/justin/Downloads/2010/nc-blocks/temp/tabblock2010_37_pophu.shp");
 
@@ -299,6 +296,7 @@ public class GerrymanderingApp {
 				MultiPolygon p = ((MultiPolygon) feature.getDefaultGeometryProperty().getValue());
 
 				String id = (String) feature.getAttribute("GEOID10");
+				id = id.replaceFirst("^0+(?!$)", "");
 				Block block = blockMap.get(id);
 				// Block block = new Block();
 				// block.setBlockId((String) feature.getAttribute("BLOCKID10"));
@@ -327,11 +325,11 @@ public class GerrymanderingApp {
 			 * System.exit(1); }
 			 */
 
-			dataStore.dispose();
-
 			GerrymanderingApp.blocks = blocks;
 
 			// return new Collection[] { blocks, empty };
+		} finally {
+			dataStore.dispose();
 		}
 
 	}
@@ -341,7 +339,8 @@ public class GerrymanderingApp {
 		Map<String, Block> blocks = new HashMap<String, Block>();
 
 		Iterable<CSVRecord> records = null;
-		File file = new File(filename);
+		ClassLoader classLoader = GerrymanderingApp.class.getClassLoader();
+		File file = new File(classLoader.getResource(filename).getFile());
 		try {
 			Reader in = new FileReader(file);
 			records = CSVFormat.DEFAULT.withHeader().parse(in);
@@ -350,6 +349,8 @@ public class GerrymanderingApp {
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		for (CSVRecord record : records) {

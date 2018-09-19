@@ -26,7 +26,7 @@ public class GerrymanderingSolution {
 
 	@ValueRangeProvider(id = "districts")
 	@ProblemFactCollectionProperty
-	private Integer[] districts = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+	private Integer[] districts = { 1, 2, 3, 4, 5, 6, 7};
 
 	@ProblemFactProperty
 	public SumationInfo getSumationInfo() {

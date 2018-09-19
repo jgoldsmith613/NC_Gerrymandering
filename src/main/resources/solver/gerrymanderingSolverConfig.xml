@@ -2,35 +2,31 @@
 
 <solver>
 	<!-- <environmentMode>FULL_ASSERT</environmentMode> -->
-
+	
+	<!-- <moveThreadCount>4</moveThreadCount> -->
 	<scanAnnotatedClasses />
 
-
-
 	<!-- Score configuration -->
-	t
 	<scoreDirectorFactory>
 		<scoreDrl>solver/gerrymanderingRules.drl</scoreDrl>
 		<initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
 
-		<!-- <kieBaseConfigurationProperties> <drools.equalityBehavior>EQUALITY</drools.equalityBehavior> </kieBaseConfigurationProperties> -->
+		<!-- <kieBaseConfigurationProperties> <drools.equalityBehavior>EQUALITY</drools.equalityBehavior> 
+			</kieBaseConfigurationProperties> -->
 	</scoreDirectorFactory>
 
 	<!-- Optimization algorithms configuration -->
 	<termination>
-		<minutesSpentLimit>8</minutesSpentLimit>
+		<minutesSpentLimit>16</minutesSpentLimit>
 	</termination>
 
 
 	<!-- Optimization algorithms configuration -->
 	<constructionHeuristic />
 	<localSearch>
-
-
 		<!-- <localSearchType>LATE_ACCEPTANCE</localSearchType> -->
-		<!-- <acceptor> <lateAcceptanceSize>100</lateAcceptanceSize> </acceptor> <forager> <acceptedCountLimit>1</acceptedCountLimit> 
-			</forager> -->
-
+		<!-- <acceptor> <lateAcceptanceSize>100</lateAcceptanceSize> </acceptor> 
+			<forager> <acceptedCountLimit>1</acceptedCountLimit> </forager> -->
 		<acceptor>
 			<entityTabuRatio>0.02</entityTabuRatio>
 		</acceptor>
@@ -38,27 +34,22 @@
 			<acceptedCountLimit>750</acceptedCountLimit>
 		</forager>
 		<termination>
-			<minutesSpentLimit>4</minutesSpentLimit>
+			<minutesSpentLimit>8</minutesSpentLimit>
 		</termination>
-
 		<changeMoveSelector />
 
 		<!-- <unionMoveSelector> <changeMoveSelector /> <swapMoveSelector /> -->
-		<!-- To escape the local optimum in this knapsack variant, add pillar swap moves to swap 2 sets of states. -->
-		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> </forager> -->
+		<!-- To escape the local optimum in this knapsack variant, add pillar swap 
+			moves to swap 2 sets of states. -->
+		<!-- <pillarSwapMoveSelector /> </unionMoveSelector> <forager> <acceptedCountLimit>1000</acceptedCountLimit> 
+			</forager> -->
 	</localSearch>
 
-	<!-- <localSearch> <unionMoveSelector> <changeMoveSelector /> <moveIteratorFactory> <moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass> 
+	<!-- <localSearch> <unionMoveSelector> <changeMoveSelector /> <moveIteratorFactory> 
+		<moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass> 
 		</moveIteratorFactory> </unionMoveSelector> </localSearch> -->
 
-
-
-
-
 	<localSearch>
-		
-
-
 		<unionMoveSelector>
 			<changeMoveSelector />
 			<swapMoveSelector>
@@ -75,7 +66,8 @@
 				<entitySelector id="entitySelector2" />
 				<secondaryEntitySelector>
 					<nearbySelection>
-						<originEntitySelector mimicSelectorRef="entitySelector2" />
+						<originEntitySelector
+							mimicSelectorRef="entitySelector2" />
 						<nearbyDistanceMeterClass>com.rhc.gerrymandering.domain.BlockDistanceMeter</nearbyDistanceMeterClass>
 						<parabolicDistributionSizeMaximum>50</parabolicDistributionSizeMaximum>
 					</nearbySelection>
@@ -85,20 +77,9 @@
 				<moveIteratorFactoryClass>com.rhc.gerrymandering.move.EdgePillarMoveFactory</moveIteratorFactoryClass>
 			</moveIteratorFactory>
 		</unionMoveSelector>
-
-
 	</localSearch>
 
-
-
-
-
-
-	<!-- <localSearch> <pillarSwapMoveSelector> <pillarSelector> <subPillarEnabled>true</subPillarEnabled> <minimumSubPillarSize>1</minimumSubPillarSize> 
-		<maximumSubPillarSize>4</maximumSubPillarSize> </pillarSelector> </pillarSwapMoveSelector> </localSearch> -->
-
-
-
-
-
+	<!-- <localSearch> <pillarSwapMoveSelector> <pillarSelector> <subPillarEnabled>true</subPillarEnabled> 
+		<minimumSubPillarSize>1</minimumSubPillarSize> <maximumSubPillarSize>4</maximumSubPillarSize> 
+		</pillarSelector> </pillarSwapMoveSelector> </localSearch> -->
 </solver>
